@@ -1,0 +1,62 @@
+!SESSION 2024-09-19 09:29:49.776 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_152
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_CA
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.atollic.truestudio.productmanager 1 0 2024-09-19 09:30:00.137
+!MESSAGE Loading product manager
+
+!ENTRY com.atollic.truestudio.productmanager 1 0 2024-09-19 09:30:00.141
+!MESSAGE OS info: Linux, 6.5.0-1022-oem, amd64
+
+!ENTRY TrueSTUDIO 1 0 2024-09-19 09:30:00.509
+!MESSAGE Target: STM32, Version: 9.0.1, Build date: 20180420-1214, Installation dir: /opt/TrueSTUDIO/ide/
+
+!ENTRY TrueSTUDIO 1 0 2024-09-19 09:30:00.510
+!MESSAGE Workspace: /home/av00350@ens.ad.etsmtl.ca/Documents/lab1-rege79310201-wano79270201
+
+!ENTRY com.atollic.truestudio.integration.processorexpert 0 0 2024-09-19 09:30:01.095
+!MESSAGE Atollic TrueSTUDIO Processor Expert integration is up.
+
+!ENTRY edu.hawaii.ics.csdl.jupiter 1 0 2024-09-19 09:30:01.105
+!MESSAGE Code Review is up.
+
+!ENTRY org.eclipse.jface 2 0 2024-09-19 09:30:01.155
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-09-19 09:30:01.155
+!MESSAGE A conflict occurred for ALT+CTRL+T:
+Binding(ALT+CTRL+T,
+	ParameterizedCommand(Command(org.eclipse.team.svn.ui.command.EditPropertiesCommand,Show Properties,
+		,
+		Category(org.eclipse.team.svn.ui.command.category,SVN,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@720c8f80,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+CTRL+T,
+	ParameterizedCommand(Command(org.eclipse.tm.terminal.connector.local.command.launch,Open Local Terminal on Selection,
+		,
+		Category(org.eclipse.tm.terminal.view.ui.commands.category,Terminal Commands,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@f591271,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY AtollicWebServices 4 0 2024-09-19 09:30:01.342
+!MESSAGE Exception in webservices
+!STACK 0
+java.io.IOException: Server returned HTTP response code: 403 for URL: http://sumba.atollic.com/tsapi/getLatestVersion
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1894)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1492)
+	at com.atollic.truestudio.productmanager.exposed.AtollicWebServices.request(AtollicWebServices.java:612)
+	at com.atollic.truestudio.productmanager.exposed.AtollicWebServices.getLatestVersion(AtollicWebServices.java:93)
+	at com.atollic.truestudio.productmanager.exposed.ProductManager$1.run(ProductManager.java:197)
+	at java.lang.Thread.run(Thread.java:748)
+
+!ENTRY TrueSTUDIO 4 0 2024-09-19 09:30:01.343
+!MESSAGE Failed to get version information: No contact with license server: Failed to contact Atollic.
+
+!ENTRY com.atollic.truestudio.productmanager 1 0 2024-09-19 09:30:50.054
+!MESSAGE Unloading product manager
