@@ -1,0 +1,151 @@
+{
+  "main": {
+    "id": "4f019624ccb9aa0e",
+    "type": "split",
+    "children": [
+      {
+        "id": "376b18efea8c04a1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1371b34b523856f5",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7d678523bcb54dac",
+    "type": "split",
+    "children": [
+      {
+        "id": "8ecb277cd9864158",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0b7f5ddd8b8fe243",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "1df7db57acf69b7d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "05c30165fd0c7c6b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1ea0871cebad8aaa",
+    "type": "split",
+    "children": [
+      {
+        "id": "9b2efdff65d78f95",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bf3586dd0a2249a7",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "03ca678e9a3e2639",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "54493ae76ffc258f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "a541178195177533",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "1371b34b523856f5",
+  "lastOpenFiles": [
+    "ELE674_labo_1.pdf",
+    "ELE674 Labo.pdf",
+    "ELE674_Labo1.md",
+    "result/buildroot/Config.in",
+    "result/buildroot",
+    "result/compilation_manuelle",
+    "result"
+  ]
+}
