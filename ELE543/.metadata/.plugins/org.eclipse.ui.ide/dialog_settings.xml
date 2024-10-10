@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="/home/reed/Downloads/lab1-rege79310201-wano79270201"/>
+		<item value="/home/reed/Documents/lab1-proto-skel"/>
+		<item value="/home/reed/Documents/cours_canada/ELE543/labs"/>
 		<item value="/home/reed/Documents/cours_canada/ELE543/lab1"/>
 	</list>
 </section>

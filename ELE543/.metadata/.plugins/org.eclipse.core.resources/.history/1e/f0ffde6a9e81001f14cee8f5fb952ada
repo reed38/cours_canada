@@ -1,0 +1,137 @@
+	/****************************Proto 1********************************************
+	 Author : Bruno De Kelper et Alexandre Ceriani
+	 Date   : 10-06-2016
+	 Description :
+	 GPIO : -User button (PB0 et PB1)
+			-Reset button (NRST)
+			-LED bleu (PC8) et verte (PC9)
+			-Led externe au board (PC0-PC7)
+			-I2C1 SDA (PB7) et SCL (PB6)
+			-ADC (PA4 et PA5)
+			-Bit Direction_FB (PA6 et PA7)
+			-Bit Direction Gauche (LSB : PB12 MSB : PB13)
+			-Bit Direction Droit (LSB : PB14 MSB : PB15)
+			-Bit calibration (PA8)
+			-PWM sur timer 3 channel 1 (PB4) et 2 (PB5)
+			-USART2 RX (PA2) et TX (PA3)
+	*/
+
+	#include <stdio.h> /*sprintf*/
+	#include "main.h"
+
+	// Fr�quence des Ticks du SysTick (en Hz)
+	#define MillisecondsIT ((uint32_t) 1000)
+	/*Fonctions main*/
+	void Configure_Clock(void);
+	void Configure_USART(void);
+	void SysTick_Handler(void) {
+
+	}
+
+
+	int main(void) {
+
+		// Configure les composantes du robot
+		__set_PRIMASK(1);
+		Configure_Clock();
+
+		/*Initialisation des p�riph�riques*/
+		Configure_USART();
+		__set_PRIMASK(0);
+		volatile uint32_t counter = 0;
+
+		while (1) {
+			counter++;
+		}
+
+
+		return (0);
+	}
+	__INLINE void Configure_Clock(void){
+		/*Il faut ajouter le code pour l'initialisation du RCC*/
+
+		// initialising RCC->CR  to 0x00000000 so there is no undefined bits after reset
+		RCC->CR=(uint32_t)0x00000000;
+
+
+		//Turning on HSE, default value 8MHZ
+		RCC->CR |= RCC_CR_HSEON;
+
+		//waiting for HSE to be stable
+		while(!(RCC->CR & RCC_CR_HSERDY));
+
+		//setting up the pre-scaler to 1
+		RCC->CFGR|=RCC_CFGR_HPRE_DIV1;
+
+
+		//switching of the pll so we can change its value
+		RCC->CFGR&=~RCC_CR_PLLON;
+
+		//waiting until pll ready is cleared
+		while(RCC->CR&RCC_CR_PLLRDY);
+
+		//defining the pll src
+		RCC->CFGR|=RCC_CFGR_PLLSRC_HSE_PREDIV;
+
+		//
+		RCC->CFGR|=RCC_CFGR_PLLNODIV;
+		//defining the pll upscaler we want 6 => 0110
+		RCC->CFGR|=RCC_CFGR_PLLMULL6;
+
+		//switching back on the pll
+		RCC->CR |= RCC_CR_PLLON; // Enable PLL
+		//waiting until the pll is ready again
+
+		while(!(RCC->CR & RCC_CR_PLLRDY));
+		//setting up the output of the pll as system clock
+		RCC->CFGR|=RCC_CFGR_SW_PLL;
+
+		while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL);
+
+
+
+		SystemCoreClockUpdate();	// Met � jour SystemCoreClock avec la config du RCC
+		SysTick_Config(SystemCoreClock/MillisecondsIT);	// Configure le SysTick � 1 ms
+	}
+
+
+
+
+	__INLINE void Configure_USART(void) {
+		RCC->AHBENR |= RCC_AHBENR_GPIOAEN; // Active l'horloge du port A
+		GPIOA->MODER &= ~GPIO_MODER_MODER3; // This line uses a bitwise AND with the negation of GPIO_MODER_MODER3 to clear the bits associated with PA3 in the MODER register.
+		GPIOA->MODER |= GPIO_MODER_MODER3_1; //This line uses a bitwise OR to set the appropriate bits for PA3 to configure it as an alternate function.
+		GPIOA->OTYPER |= GPIO_OTYPER_OT_3; // Sortie Drain Ouvert pour PA3 (RX)
+		GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR3; // Pull-Up pour PA3 (RX)
+		GPIOA->PUPDR |= GPIO_PUPDR_PUPDR3_0;
+		GPIOA->OSPEEDR &= ~GPIO_OSPEEDR_OSPEEDR3; // Vitesse basse pour PA3 (RX)
+		GPIOA->AFR[0] &= ~GPIO_AFRL_AFR3; // AF1 pour PA3 => USART2 : RX
+		GPIOA->AFR[0] |= (((uint32_t) 0x01) << (4*3));
+		RCC->APB1ENR |= RCC_APB1ENR_USART2EN; // Active l'horloge du USART2
+		RCC->APB1RSTR |= RCC_APB1RSTR_USART2RST; // Place le USART2 en Reset
+		RCC->APB1RSTR &= ~RCC_APB1RSTR_USART2RST; // Retire le Reset du USART2
+		// Protocole : (8 bits), (Parité pair), (1 Stop bit), (115200 Baud)
+
+	   USART2->CR1 &= ~(USART_CR1_OVER8 | USART_CR1_PS | USART_CR1_PCE);
+	   USART2->CR1 |= ( USART_CR1_M);
+	   USART2->CR2 |= ~(USART_CR2_STOP);
+
+		USART2->BRR = (uint16_t)(48000000 / 115200);
+		USART2->CR1 |= (USART_CR1_RE | USART_CR1_UE); // Active le USART2 et la RX
+	}
+	/*End of file*/
+
+	void NVIC_Configuration(void) {
+	    NVIC_SetPriority(USART2_IRQn, 1); // Définir la priorité (1 = moyenne)
+	    NVIC_EnableIRQ(USART2_IRQn); // Activer l'interruption USART2
+	}
+
+
+	void USART2_IRQHandler(void) {
+	    if (USART2->ISR & USART_ISR_RXNE) { // Vérifie si le flag RXNE est levé
+	        uint8_t data = USART2->RDR; // Lire les données reçues
+	        // Traitement des données reçues ici
+	    }
+	    // Ajoutez d'autres traitements d'erreur si nécessaire
+	}
+

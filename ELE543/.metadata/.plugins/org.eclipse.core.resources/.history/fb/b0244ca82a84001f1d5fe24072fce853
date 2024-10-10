@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <buffer.h>
+#include <string.h>
+
+//USART------------------------------------------------------------------------------------
+
+//USART2-----------------------------------------------------------------------------------
+//USART2 data structures-------------------------------------------------------------------
+
+//USART TX------------------------------------------------------------------------------------
+buffer_t usart2_tx_buffer;
+uint8_t usart2_tx_buffer_data[64];
+buffer_new(&usart2_tx_buffer, usart2_tx_buffer_data, 8);
+uint8_t usart2_tx_translitted_flag=0;
+
+//USARTRX------------------------------------------------------------------------------------
+buffer_t usart2_rx_buffer;
+uint8_t usart2_rx_buffer_data[64];
+buffer_new(&usart2_rx_buffer, usart2_tx_buffer_data, 8);
+
+//USART------------------------------------------------------------------------------------
+void USART2_Transmit(uint8_t *string) {
+
+    USART2->CR1 &= USART_CR1_TXEIE;  // Setting the TXEIE bit to enable the TX interrupt
+    for (int i=0;i<length(string);i++)
+    {
+    	buffer_push(usart2_tx_buffer,string[i]);
+    }
+
+
+}
+
+void sendDebugMessage(char *message)
+{
+
+    // Calculate the total length (including the start and end bytes)
+    uint16_t message_length = strlen(message);
+    uint16_t total_length = message_length + 2; // +2 for 0xFE and 0xFF
+
+    // Create a buffer to hold the final message
+    unsigned char packaged_message[total_length];
+
+    // Set the start and end bytes
+    packaged_message[0] = 0xFE; // Start byte
+    memcpy(&packaged_message[1], message, message_length); // Copy the message
+    packaged_message[total_length - 1] = 0xFF; // End byte
+
+
+
+}

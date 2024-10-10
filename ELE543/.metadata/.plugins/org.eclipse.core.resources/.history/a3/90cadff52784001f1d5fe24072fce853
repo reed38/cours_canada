@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <buffer.h>
+
+
+//USART------------------------------------------------------------------------------------
+
+//USART2-----------------------------------------------------------------------------------
+//USART2 data structures-------------------------------------------------------------------
+
+//USART TX------------------------------------------------------------------------------------
+
+buffer_t usart2_tx_buffer;
+uint8_t usart2_tx_buffer_data[8];
+buffer_new(&usart2_tx_buffer, usart2_tx_buffer_data, 8);
+volatile uint8_t usart2_tx_index = 0; // Current index in the transmission buffer
+volatile uint8_t usart2_tx_length = 0; // Length of the data to transmit
+volatile uint8_t usart2_tx_completed=1; // if the last tx buffer was fully transfered
+
+//USARTRX------------------------------------------------------------------------------------
+char usart2_rx_buffer[TX_BUFFER_SIZE]={0}; // Buffer for outgoing data
+volatile uint8_t usart2_rx_index = 0; // Current index in the transmission buffer
+volatile uint8_t usart2_rx_length = 0; // Length of the data to transmit
+
+//USART------------------------------------------------------------------------------------
+void USART2_Transmit(char *string) {
+	while(!usart2_tx_completed);
+	usart2_tx_completed=0;
+	usart2_tx_length = strlen(string);
+	usart2_tx_index = 0;
+
+    // Copy string to the buffer
+    for (uint8_t i = 0; i < usart2_tx_length; i++) {
+        tx_buffer[i] = string[i];
+    }
+
+    // Enable TXE interrupt to start transmission
+    USART1->CR1 |= USART_CR1_TXEIE;
+}
+
+void sendDebugMessage(char *message)
+{
+
+    // Calculate the total length (including the start and end bytes)
+    uint16_t message_length = strlen(message);
+    uint16_t total_length = message_length + 2; // +2 for 0xFE and 0xFF
+
+    // Create a buffer to hold the final message
+    unsigned char packaged_message[total_length];
+
+    // Set the start and end bytes
+    packaged_message[0] = 0xFE; // Start byte
+    memcpy(&packaged_message[1], message, message_length); // Copy the message
+    packaged_message[total_length - 1] = 0xFF; // End byte
+
+
+
+}

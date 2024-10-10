@@ -1,0 +1,31 @@
+18:01:02 **** Incremental Build of configuration Debug for project Proto1 ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ../src/communication.c -mthumb -mcpu=cortex-m0 -std=gnu11 -DHSI_VALUE=8000000 -DSTM32F0XX_MD -DSTM32F051x8 -I/home/reed/Documents/lab1-proto-skel/src -I/home/reed/Documents/lab1-proto-skel/Libraries/CMSIS/Include -I/home/reed/Documents/lab1-proto-skel/Libraries/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -lm -specs=nano.specs -o src/communication.o 
+arm-atollic-eabi-gcc -c ../src/buffer.c -mthumb -mcpu=cortex-m0 -std=gnu11 -DHSI_VALUE=8000000 -DSTM32F0XX_MD -DSTM32F051x8 -I/home/reed/Documents/lab1-proto-skel/src -I/home/reed/Documents/lab1-proto-skel/Libraries/CMSIS/Include -I/home/reed/Documents/lab1-proto-skel/Libraries/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -lm -specs=nano.specs -o src/buffer.o 
+arm-atollic-eabi-gcc -c ../src/stm32f0xx_it.c -mthumb -mcpu=cortex-m0 -std=gnu11 -DHSI_VALUE=8000000 -DSTM32F0XX_MD -DSTM32F051x8 -I/home/reed/Documents/lab1-proto-skel/src -I/home/reed/Documents/lab1-proto-skel/Libraries/CMSIS/Include -I/home/reed/Documents/lab1-proto-skel/Libraries/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -lm -specs=nano.specs -o src/stm32f0xx_it.o 
+In file included from ../src/communication.c:3:0:
+../src/buffer.h:7:1: warning: multi-line comment [-Wcomment]
+ //#define BUFFER_NEW(x, y) \
+ ^
+../src/communication.c:14:12: error: expected declaration specifiers or '...' before '&' token
+ buffer_new(&usart2_tx_buffer, usart2_tx_buffer_data, (uint32_t)64);
+            ^
+../src/communication.c:14:31: error: expected declaration specifiers or '...' before 'usart2_tx_buffer_data'
+ buffer_new(&usart2_tx_buffer, usart2_tx_buffer_data, (uint32_t)64);
+                               ^~~~~~~~~~~~~~~~~~~~~
+../src/communication.c:14:54: error: expected declaration specifiers or '...' before '(' token
+ buffer_new(&usart2_tx_buffer, usart2_tx_buffer_data, (uint32_t)64);
+                                                      ^
+../src/communication.c:20:12: error: expected declaration specifiers or '...' before '&' token
+ buffer_new(&usart2_rx_buffer, usart2_rx_buffer_data,(uint32_t) 64);
+            ^
+../src/communication.c:20:31: error: expected declaration specifiers or '...' before 'usart2_rx_buffer_data'
+ buffer_new(&usart2_rx_buffer, usart2_rx_buffer_data,(uint32_t) 64);
+                               ^~~~~~~~~~~~~~~~~~~~~
+../src/communication.c:20:53: error: expected declaration specifiers or '...' before '(' token
+ buffer_new(&usart2_rx_buffer, usart2_rx_buffer_data,(uint32_t) 64);
+                                                     ^
+Info: Parallel threads used: 3
+
+18:01:02 Build Finished (took 265ms)
+

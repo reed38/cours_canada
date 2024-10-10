@@ -1,0 +1,179 @@
+/****************************Proto 1********************************************
+ Author : Bruno De Kelper et Alexandre Ceriani
+ Date   : 10-06-2016
+ Description :
+ GPIO : -User button (PB0 et PB1)
+         -Reset button (NRST)
+         -LED bleu (PC8) et verte (PC9)
+         -Led externe au board (PC0-PC7)
+         -I2C1 SDA (PB7) et SCL (PB6)
+         -ADC (PA4 et PA5)
+         -Bit Direction_FB (PA6 et PA7)
+         -Bit Direction Gauche (LSB : PB12 MSB : PB13)
+         -Bit Direction Droit (LSB : PB14 MSB : PB15)
+         -Bit calibration (PA8)
+         -PWM sur timer 3 channel 1 (PB4) et 2 (PB5)
+         -USART2 RX (PA2) et TX (PA3)
+*/
+
+#include <stdio.h> /*sprintf*/
+#include "main.h"
+
+// Fréquence des Ticks du SysTick (en Hz)
+#define MillisecondsIT ((uint32_t) 1000)
+
+// Fonctions main
+void SystemInit(void);
+
+void Configure_Clock(void);
+void Configure_USART(void);
+void NVIC_Configuration(void);
+void SysTick_Handler(void) ;
+void test_uart_transmission(char *stringtosend);
+
+
+volatile uint8_t uart2Buffer[3] = {0};
+volatile uint8_t uart2BufferCounter = 0;
+
+int main(void) {
+    __set_PRIMASK(1);
+    SystemInit(); // Initialisation du système
+    Configure_Clock();
+    Configure_USART(); // Configurer l'USART
+    NVIC_Configuration(); // Configurer le NVIC
+    __set_PRIMASK(0);
+
+    volatile uint32_t counter = 0;
+    char stringtosend[]="salutation camarade!";
+    while (1) {
+        __set_PRIMASK(1);
+
+    	test_uart_transmission(stringtosend);
+        __set_PRIMASK(0);
+
+
+        // Optionally add a delay or toggle an LED here for debugging
+    }
+    return 0;
+}
+
+void test_uart_transmission(char *stringtosend)
+{
+	uint8_t n = 0;
+	do {
+	if ((USART2->ISR & USART_ISR_TXE) == USART_ISR_TXE) {
+	USART2->TDR = (uint16_t) (stringtosend[n++]);
+	}
+	} while (stringtosend[n] != 0x00);
+}
+
+__INLINE void Configure_Clock(void) {
+    // Initializing RCC->CR to 0x00000000 so there are no undefined bits after reset
+    RCC->CR = 0;
+
+    // Turning on HSE, default value 8MHZ
+    RCC->CR |= RCC_CR_HSEON;
+
+    // Waiting for HSE to be stable
+    while (!(RCC->CR & RCC_CR_HSERDY));
+
+    // Setting up the pre-scaler to 1
+    RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
+
+    // Switching off the PLL so we can change its value
+    RCC->CR &= ~RCC_CR_PLLON;
+
+    // Waiting until PLL ready is cleared
+    while (RCC->CR & RCC_CR_PLLRDY);
+
+    // Defining the PLL source
+    RCC->CFGR |= RCC_CFGR_PLLSRC_HSE_PREDIV;
+
+    // Defining the PLL upscaler we want (6 => 0110)
+    RCC->CFGR |= RCC_CFGR_PLLMULL6;
+
+    // Switching back on the PLL
+    RCC->CR |= RCC_CR_PLLON; // Enable PLL
+    // Waiting until the PLL is ready again
+    while (!(RCC->CR & RCC_CR_PLLRDY));
+
+    // Setting up the output of the PLL as system clock
+    RCC->CFGR |= RCC_CFGR_SW_PLL;
+
+    // Wait until the PLL is used as system clock
+    while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL);
+
+    SystemCoreClockUpdate(); // Met à jour SystemCoreClock avec la config du RCC
+    SysTick_Config(SystemCoreClock / MillisecondsIT); // Configure le SysTick à 1 ms
+}
+
+__INLINE void Configure_USART(void) {
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; // Active l'horloge du port A
+    RCC->APB1ENR |= RCC_APB1ENR_USART2EN; // Active l'horloge du USART2
+
+    // PA2 (TX)
+    GPIOA->MODER &= ~GPIO_MODER_MODER2; // Clear PA2 mode
+    GPIOA->MODER |= GPIO_MODER_MODER2_1; // Set PA2 to alternate function
+    GPIOA->OTYPER &= ~GPIO_OTYPER_OT_2; // Push-pull for TX
+    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR2; // No pull-up/pull-down
+    GPIOA->AFR[0] &= ~GPIO_AFRL_AFR2; // Clear AF for PA2
+    GPIOA->AFR[0] |= (0x01 << (4 * 2)); // AF1 for PA2
+
+    // PA3 (RX)
+    GPIOA->MODER &= ~GPIO_MODER_MODER3; // Clear PA3 mode
+    GPIOA->MODER |= GPIO_MODER_MODER3_1; // Set PA3 to alternate function
+    GPIOA->OTYPER |= GPIO_OTYPER_OT_3; // Open-drain for RX
+    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR3; // Clear pull-up/pull-down
+    GPIOA->PUPDR |= GPIO_PUPDR_PUPDR3_0; // Pull-up for RX
+    GPIOA->AFR[0] &= ~GPIO_AFRL_AFR3; // Clear AF for PA3
+    GPIOA->AFR[0] |= (0x01 << (4 * 3)); // AF1 for PA3
+
+    // Reset USART2
+    RCC->APB1RSTR |= RCC_APB1RSTR_USART2RST; // Place USART2 in reset
+    RCC->APB1RSTR &= ~RCC_APB1RSTR_USART2RST; // Release reset
+
+    // USART Configuration
+    USART2->CR1 &= ~(USART_CR1_OVER8 | USART_CR1_PCE | USART_CR1_PS); // 8 data bits, no parity
+    USART2->CR1 &= ~USART_CR1_M; // 8 data bits
+    USART2->CR2 &= ~USART_CR2_STOP; // 1 stop bit
+    USART2->BRR = (uint16_t)(48000000 / 9600); // Baud rate
+    USART2->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE); // Enable receiver, transmitter and USART
+    USART2->CR1 |= USART_CR1_RXNEIE; // Enable RXNE interrupt
+}
+
+void
+
+void sendDebugMessage(char *message)
+{
+
+    // Calculate the total length (including the start and end bytes)
+    uint16_t message_length = strlen(message);
+    uint16_t total_length = message_length + 2; // +2 for 0xFE and 0xFF
+
+    // Create a buffer to hold the final message
+    unsigned char packaged_message[total_length];
+
+    // Set the start and end bytes
+    packaged_message[0] = 0xFE; // Start byte
+    memcpy(&packaged_message[1], message, message_length); // Copy the message
+    packaged_message[total_length - 1] = 0xFF; // End byte
+
+}
+
+void NVIC_Configuration(void) {
+    NVIC_SetPriority(USART2_IRQn, 1); // Définir la priorité (1 = moyenne)
+    NVIC_EnableIRQ(USART2_IRQn); // Activer l'interruption USART2
+}
+
+void USART2_IRQHandler(void) {
+    if (USART2->ISR & USART_ISR_RXNE) {
+        uart2Buffer[uart2BufferCounter++] = USART2->RDR; // Read data
+        if (uart2BufferCounter >= sizeof(uart2Buffer)) {
+            uart2BufferCounter = 0; // Reset if buffer overflow
+        }
+    }
+
+    if (USART2->ISR & USART_ISR_ORE) { // Handle overrun error
+        USART2->ICR |= USART_ICR_ORECF; // Clear overrun error
+    }
+}
