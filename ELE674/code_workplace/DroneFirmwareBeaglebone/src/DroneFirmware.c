@@ -76,6 +76,8 @@ void SigTimerHandler (int signo) {
 	if ((Period % MAIN_PERIOD) == 0)
 		sem_post (&MainTimerSem);
 	Period = (Period + 1) % MAX_PERIOD;
+
+
 }
 
 

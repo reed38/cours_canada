@@ -49,6 +49,7 @@ enum { MOTOR_NONE, MOTOR_PWM_ONLY, MOTOR_LED_ONLY, MOTOR_PWM_LED };
 #define NUM_GPIO_CHIPS 			4
 #define NUM_GPIO_LINE_PER_CHIP	32
 
+
 struct gpiod_chip *gpio_chips[NUM_GPIO_CHIPS];
 struct gpiod_line *gpio_lines[NUM_GPIO_CHIPS][NUM_GPIO_LINE_PER_CHIP];
 
@@ -64,5 +65,7 @@ typedef struct motor_struct {
 int MotorInit (MotorStruct *Motor);
 int MotorStart (void);
 int MotorStop (MotorStruct *Motor);
+
+
 
 #endif /* MOTOR_H_ */
