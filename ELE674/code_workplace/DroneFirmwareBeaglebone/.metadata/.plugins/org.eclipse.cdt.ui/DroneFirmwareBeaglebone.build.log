@@ -1,0 +1,84 @@
+14:09:55 **** Incremental Build of configuration Debug for project DroneFirmwareBeaglebone ****
+make -j16 all 
+Building file: ../src/Control.c
+Building file: ../src/Attitude.c
+Building file: ../src/DroneFirmware.c
+Building file: ../src/Mavlink.c
+Invoking: Cross GCC Compiler
+Building file: ../src/Motor.c
+Invoking: Cross GCC Compiler
+Invoking: Cross GCC Compiler
+arm-linux-gnueabi-gcc -I"/home/reed/Downloads/DroneFirmwareBeaglebone/src" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -O0 -g3 -ggdb -Wall -c -fmessage-length=0 -pthread -lm -lrt -lgpiod -MMD -MP -MF"src/Attitude.d" -MT"src/Attitude.o" -o "src/Attitude.o" "../src/Attitude.c"
+Invoking: Cross GCC Compiler
+arm-linux-gnueabi-gcc -I/usr/src/gcc-linaro-7.5/include -I/usr/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include-fixed -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/plugin/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/install-tools/include -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/src" -O0 -g3 -ggdb -Wall -c -fmessage-length=0 -pthread -lm -lrt -lgpiod -MMD -MP -MF"src/Control.d" -MT"src/Control.o" -o "src/Control.o" "../src/Control.c"
+Invoking: Cross GCC Compiler
+arm-linux-gnueabi-gcc -I/usr/src/gcc-linaro-7.5/include -I/usr/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include-fixed -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/plugin/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/install-tools/include -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/src" -O0 -g3 -ggdb -Wall -c -fmessage-length=0 -pthread -lm -lrt -lgpiod -MMD -MP -MF"src/DroneFirmware.d" -MT"src/DroneFirmware.o" -o "src/DroneFirmware.o" "../src/DroneFirmware.c"
+arm-linux-gnueabi-gcc -I/usr/src/gcc-linaro-7.5/include -I/usr/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include-fixed -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/plugin/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/install-tools/include -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/src" -O0 -g3 -ggdb -Wall -c -fmessage-length=0 -pthread -lm -lrt -lgpiod -MMD -MP -MF"src/Mavlink.d" -MT"src/Mavlink.o" -o "src/Mavlink.o" "../src/Mavlink.c"
+arm-linux-gnueabi-gcc -I/usr/src/gcc-linaro-7.5/include -I/usr/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include-fixed -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/plugin/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/install-tools/include -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/src" -O0 -g3 -ggdb -Wall -c -fmessage-length=0 -pthread -lm -lrt -lgpiod -MMD -MP -MF"src/Motor.d" -MT"src/Motor.o" -o "src/Motor.o" "../src/Motor.c"
+Building file: ../src/Sensor.c
+Invoking: Cross GCC Compiler
+arm-linux-gnueabi-gcc -I/usr/src/gcc-linaro-7.5/include -I/usr/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/include -I/usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/include-fixed -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/plugin/include -I/usr/src/gcc-linaro-7.5/lib/gcc/arm-linux-gnueabi/7.5.0/install-tools/include -I"/home/reed/Downloads/DroneFirmwareBeaglebone/include" -I"/home/reed/Downloads/DroneFirmwareBeaglebone/src" -O0 -g3 -ggdb -Wall -c -fmessage-length=0 -pthread -lm -lrt -lgpiod -MMD -MP -MF"src/Sensor.d" -MT"src/Sensor.o" -o "src/Sensor.o" "../src/Sensor.c"
+In file included from /usr/include/features.h:392:0,
+                 from /usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from ../src/DroneFirmware.c:11:
+/usr/include/features-time64.h:21:10: fatal error: bits/timesize.h: No such file or directory
+ #include <bits/timesize.h>
+          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from /usr/include/features.h:392:0,
+                 from /usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/string.h:26,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/mavlink/v1.0/common/../protocol.h:4,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/mavlink/v1.0/common/common.h:26,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/mavlink/v1.0/common/mavlink.h:25,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/Mavlink.h:15,
+                 from ../src/Mavlink.c:11:
+/usr/include/features-time64.h:21:10: fatal error: bits/timesize.h: No such file or directory
+ #include <bits/timesize.h>
+          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from /usr/include/features.h:392:0,
+                 from /usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/Motor.h:11,
+                 from ../src/Motor.c:9:
+/usr/include/features-time64.h:21:10: fatal error: bits/timesize.h: No such file or directory
+ #include <bits/timesize.h>
+          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from /usr/include/features.h:392:0,
+                 from /usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/Control.h:11,
+                 from ../src/Control.c:8:
+/usr/include/features-time64.h:21:10: fatal error: bits/timesize.h: No such file or directory
+ #include <bits/timesize.h>
+          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [src/subdir.mk:42: src/DroneFirmware.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from /usr/include/features.h:392:0,
+                 from /usr/src/gcc-linaro-7.5/arm-linux-gnueabi/libc/usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from /home/reed/Downloads/DroneFirmwareBeaglebone/include/Sensor.h:14,
+                 from ../src/Sensor.c:8:
+/usr/include/features-time64.h:21:10: fatal error: bits/timesize.h: No such file or directory
+ #include <bits/timesize.h>
+          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [src/subdir.mk:42: src/Mavlink.o] Error 1
+make: *** [src/subdir.mk:42: src/Motor.o] Error 1
+make: *** [src/subdir.mk:42: src/Control.o] Error 1
+make: *** [src/subdir.mk:42: src/Sensor.o] Error 1
+In file included from /home/reed/Downloads/DroneFirmwareBeaglebone/include/Control.h:24:0,
+                 from ../src/Attitude.c:8:
+/home/reed/Downloads/DroneFirmwareBeaglebone/include/Motor.h:23:10: fatal error: gpiod.h: No such file or directory
+ #include <gpiod.h>
+          ^~~~~~~~~
+compilation terminated.
+make: *** [src/subdir.mk:35: src/Attitude.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+
+14:09:56 Build Failed. 13 errors, 0 warnings. (took 352ms)
+

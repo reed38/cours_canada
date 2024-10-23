@@ -1,0 +1,143 @@
+/**
+ *
+ */
+#include "stm32f0xx_it.h"
+#include <string.h>
+#include "buffer.h"
+#include <stdint.h>
+#include "usarts.h"
+
+//USART------------------------------------------------------------------------------------
+
+//USART2-----------------------------------------------------------------------------------
+
+//USART2 data buffers-------------------------------------------------------------------
+
+//USART TX------------------------------------------------------------------------------------
+buffer_t usart2_tx_buffer;
+uint8_t usart2_tx_buffer_data[64];
+uint8_t usart2_tx_translitted_flag=0;
+
+//USART2 RX------------------------------------------------------------------------------------
+buffer_t usart2_rx_buffer;
+uint8_t usart2_rx_buffer_data[64];
+
+//USART configuration------------------------------------------------------------------------------------
+
+
+inline void Configure_USART(void) {
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; // Active l'horloge du port A
+    RCC->APB1ENR |= RCC_APB1ENR_USART2EN; // Active l'horloge du USART2
+
+    // PA2 (TX)
+    GPIOA->MODER &= ~GPIO_MODER_MODER2; // Clear PA2 mode
+    GPIOA->MODER |= GPIO_MODER_MODER2_1; // Set PA2 to alternate function
+    GPIOA->OTYPER &= ~GPIO_OTYPER_OT_2; // Push-pull for TX
+    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR2; // No pull-up/pull-down
+    GPIOA->AFR[0] &= ~GPIO_AFRL_AFR2; // Clear AF for PA2
+    GPIOA->AFR[0] |= (0x01 << (4 * 2)); // AF1 for PA2
+
+    // PA3 (RX)
+    GPIOA->MODER &= ~GPIO_MODER_MODER3; // Clear PA3 mode
+    GPIOA->MODER |= GPIO_MODER_MODER3_1; // Set PA3 to alternate function
+    GPIOA->OTYPER |= GPIO_OTYPER_OT_3; // Open-drain for RX
+    GPIOA->PUPDR &= ~GPIO_PUPDR_PUPDR3; // Clear pull-up/pull-down
+    GPIOA->PUPDR |= GPIO_PUPDR_PUPDR3_0; // Pull-up for RX
+    GPIOA->AFR[0] &= ~GPIO_AFRL_AFR3; // Clear AF for PA3
+    GPIOA->AFR[0] |= (0x01 << (4 * 3)); // AF1 for PA3
+
+    // Reset USART2
+    RCC->APB1RSTR |= RCC_APB1RSTR_USART2RST; // Place USART2 in reset
+    RCC->APB1RSTR &= ~RCC_APB1RSTR_USART2RST; // Release reset
+
+    // USART Configuration
+    USART2->CR1 &= ~(USART_CR1_OVER8 | USART_CR1_PCE | USART_CR1_PS); // 8 data bits, no parity
+    USART2->CR1 &= ~USART_CR1_M; // 8 data bits
+    USART2->CR2 &= ~USART_CR2_STOP; // 1 stop bit
+    USART2->BRR = (uint16_t)(48000000 / 9600); // Baud rate
+    USART2->CR1 |= (USART_CR1_RE | USART_CR1_TE | USART_CR1_UE); // Enable receiver, transmitter and USART
+    USART2->CR1 |= USART_CR1_RXNEIE; // Enable RXNE interrupt
+    USART2->CR1 |= USART_CR1_TXEIE; // Enable RXNE interrupt
+
+
+    //initializing the circular buffers
+    buffer_new(&usart2_rx_buffer, usart2_rx_buffer_data,(uint32_t) 64);
+    buffer_new(&usart2_tx_buffer, usart2_tx_buffer_data, (uint32_t)64);
+
+}
+
+//USART interruptions------------------------------------------------------------------------------------
+
+void USART2_IRQHandler(void) {
+
+    if (USART2->ISR & USART_ISR_ORE)  // Handle overrun error
+        USART2->ICR |= USART_ICR_ORECF; // Clear overrun error
+
+
+    if (USART2->ISR & USART_ISR_RXNE) { //if a byte is ready to be read uin the USART
+
+    	uint8_t buffer_element=USART2->RDR; // Read data
+    	buffer_push(&usart2_rx_buffer,buffer_element);
+
+		//adding the received byte to the circular buffer so it is looped back to the controller
+    	if(!DEBUG_FLAG_USART2)
+    	{
+    		buffer_push(&usart2_tx_buffer, buffer_element);
+    		USART2->CR1|=USART_CR1_TXEIE;
+    	}
+
+    }
+
+    if (((USART2->CR1 & USART_CR1_TXEIE)==USART_CR1_TXEIE) && ((USART2->ISR & USART_ISR_TXE) == USART_ISR_TXE))
+    {
+    	if(usart2_tx_buffer.count==0)
+    	{
+    		USART2->CR1&=~USART_CR1_TXEIE;
+    		return;
+    	}
+
+    	uint8_t buffer_element;
+    	//reading the usart2 tx circular buffer and sending it
+    	buffer_pull(&usart2_tx_buffer, &buffer_element);
+		USART2->TDR=(uint16_t)buffer_element;
+
+
+    }
+
+
+
+}
+
+// USART functions-------------------------------------------------------------------------------------------
+void USART2_Transmit(uint8_t *string, uint32_t length) {
+
+    for (int i=0;i<length ;i++)
+    {
+    	buffer_push(&usart2_tx_buffer,string[i]);
+
+    }
+    USART2->CR1 |= USART_CR1_TXEIE;  // Setting the TXEIE bit to enable the TX interrupt
+
+}
+
+
+void send_debug_message_usart2(char *message)
+{
+    // Calculate the total length (including the start and end bytes)
+    uint32_t message_length = strlen(message);
+    uint32_t total_length = message_length + 2; // +2 for 0xFE and 0xFF
+
+    // Create a buffer to hold the final message
+    char packaged_message[total_length];
+
+    // Set the start and end bytes
+    packaged_message[0] = 0xFE; // Start byte
+    memcpy(&packaged_message[1], message, message_length); // Copy the message
+    packaged_message[total_length - 1] = 0xFF; // End byte
+
+
+    USART2_Transmit((uint8_t*)packaged_message, total_length);
+
+    // Re-enable echo (if you have an echo flag or mechanism)
+    // enable_echo(); // Pseudocode; implement according to your logic
+}

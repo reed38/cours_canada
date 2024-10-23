@@ -1,9 +1,0 @@
-#
-#Sun Oct 06 18:01:02 EDT 2024
-Debug/src/buffer.o=1
-src/buffer.h=1
-src/communication.c=1
-Debug/src/stm32f0xx_it.o=1
-Debug/Proto1.elf=1
-Debug/Proto1=1
-Debug/src/communication.o=1
